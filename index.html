@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zufallsgenerator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background: #F4B393; /* Hintergrundfarbe geändert */
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      text-align: center;
+      color: #222; /* Schriftfarbe geändert */
+    }
+
+    header {
+      padding: 30px 0 10px;
+    }
+
+    header img {
+      border: none; /* Bild ohne Umrandung */
+      width: 300px; /* Breite auf 300px gesetzt */
+      height: auto; /* Höhe passt sich der Breite an */
+      object-fit: cover; /* Bild bleibt unverzerrt */
+    }
+
+    h1 {
+      font-size: 2.4rem;
+      margin: 25px 0 15px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      width: 90%;
+      max-width: 600px;
+      margin-top: 20px; /* Verringert den Abstand zwischen der Überschrift und den Themen */
+    }
+
+    #display {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      font-size: 1.6rem;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      display: none;
+      animation: fadeIn 0.3s ease-in-out;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      width: 80%;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.97); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    button {
+      margin-top: 30px;
+      padding: 20px 45px;
+      font-size: 1.5rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 999px;
+      background-color: #333;
+      color: white;
+      cursor: pointer;
+      font-family: inherit;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #111;
+    }
+
+    #retryButton {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 25px;
+      font-size: 1.1rem;
+      opacity: 0.85;
+      display: none;
+    }
+
+    @media (max-width: 500px) {
+      main {
+        margin-top: 8vh;
+      }
+
+      #display {
+        font-size: 1.3rem;
+        padding: 25px;
+      }
+
+      button {
+        font-size: 1.4rem;
+        padding: 18px 40px;
+      }
+
+      #retryButton {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://github.com/traumfunke/test3/blob/main/Cheers%20to%20Us.png?raw=true" alt="Mein Bild" />
+  </header>
+
+  <h1>Kleine Gesten</h1>
+
+  <main>
+    <div id="display"></div>
+    <button id="startButton" onclick="startRoll()">Start</button>
+  </main>
+
+  <button id="retryButton" onclick="restart()">Nochmal</button>
+
+  <script>
+    const begriffe = [
+      "Welche kleine Geste von mir hat dich zuletzt berührt?",
+      "Was ist für dich eine unterschätzte Art, Liebe zu zeigen?",
+      "Wann hat eine Kleinigkeit deinen Tag gerettet?",
+      "Was ist dein liebstes 'kleines Ritual' mit mir?",
+      "Welche Alltagsgeste zeigt dir, dass ich an dich denke?",
+      "Was könntest du jeden Tag für mich tun – einfach, weil du’s gern machst?",
+      "Gibt es eine Geste, die dir immer ein Lächeln ins Gesicht zaubert?",
+      "Wann hast du dich zuletzt durch etwas scheinbar Nebensächliches sehr wertgeschätzt gefühlt?",
+      "Welche Geste würdest du gerne häufiger von mir bekommen?",
+      "Wann warst du zuletzt überrascht von einer liebevollen Kleinigkeit?",
+      "Welche Nachricht im Alltag macht dich richtig glücklich?",
+      "Welche Berührung fühlst du als besonders zärtlich?",
+      "Wie kannst du mir im Alltag zeigen, dass du für mich da bist – ohne viele Worte?",
+      "Was bedeutet es für dich, wenn ich dir etwas abnehme?",
+      "Welche Geste hilft dir, dich sicher zu fühlen?",
+      "Welche kleinen Dinge würdest du gerne als Paar-Ritual einführen?",
+      "Welche Aufmerksamkeit hast du nie vergessen?",
+      "Was war die schönste Überraschung im Kleinen?",
+      "Was könntest du tun, um mir den Start in den Tag zu verschönern?",
+      "Welche Gewohnheit von uns ist für dich besonders liebevoll?",
+      "Wie kann ich dir zeigen, dass ich an dich denke, wenn du nicht da bist?",
+      "Wann hat dir ein kleines Geschenk viel bedeutet?",
+      "Welche alltägliche Geste bedeutet dir mehr, als ich vielleicht ahne?",
+      "Wie drückst du Dankbarkeit durch kleine Handlungen aus?",
+      "Welche Kleinigkeit tust du nur für mich?",
+      "Was war das Schönste, das du mir einfach so gesagt hast?",
+      "Was möchtest du mir häufiger sagen oder zeigen – auch im Kleinen?",
+      "Wie könnten wir unseren Alltag mit kleinen Aufmerksamkeiten versüßen?",
+      "Welche liebevolle Geste hast du dir mal von mir gewünscht?",
+      "Gibt es etwas Kleines, das wir jeden Tag füreinander tun könnten?",
+      "Wie kannst du mir heute eine Mini-Freude machen?",
+      "Welche Nachricht oder Notiz hat dich besonders berührt?",
+      "Wie kann ich dich beim Nachhausekommen willkommen heißen?",
+      "Wann war ein kurzer Blick oder ein Lächeln besonders bedeutungsvoll?",
+      "Welches Frühstück oder Getränk ist für dich ein stiller Liebesbeweis?",
+      "Was ist dein geheimer 'Love Code' im Alltag?",
+      "Wie kannst du zeigen, dass du mich 'siehst' – mitten im Stress?",
+      "Welche spontane Kleinigkeit würdest du gern öfter erleben?",
+      "Was ist deine Art, mir im Kleinen zu sagen: 'Ich liebe dich'?",
+      "Welche kleine Geste hat dich einmal zu Tränen gerührt?"
+    ];
+
+    let interval;
+
+    function startRoll() {
+      const display = document.getElementById("display");
+      const startButton = document.getElementById("startButton");
+      const retryButton = document.getElementById("retryButton");
+      
+      startButton.style.display = "none"; // Hide the start button
+      display.style.display = "block"; // Show the display div
+
+      let index = 0;
+
+      interval = setInterval(() => {
+        display.textContent = begriffe[index];
+        index = (index + 1) % begriffe.length;
+      }, 150);
+
+      setTimeout(() => {
+        clearInterval(interval);
+        display.textContent = begriffe[Math.floor(Math.random() * begriffe.length)];
+        retryButton.style.display = "inline-block";
+      }, 3000);
+    }
+
+    function restart() {
+      const display = document.getElementById("display");
+      const retryButton = document.getElementById("retryButton");
+      const startButton = document.getElementById("startButton");
+
+      retryButton.style.display = "none";
+      display.style.display = "none";
+      startButton.style.display = "inline-block";
+    }
+  </script>
+</body>
+</html>
